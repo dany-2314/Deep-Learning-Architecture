@@ -1,0 +1,73 @@
+Talked about the building blocks of nerual networks, the perceptron and how it was inspired by the brains
+
+
+the perceptron - A sing neron 
+- output, activation funciton, and inputs of a LC 
+- output can be classes or regression
+
+
+different types of activation functions and their background and use cases
+- sigmoid 
+- tanH 
+- ReLU 
+
+
+talked about how Non-linearity activation functions allows us to approximate complex functions
+
+
+we looked at how to extend the basic idea of a NN to deep layers and multiple outputs. 
+eg. a two layer network contains 1 hidden layer and 1 output layer, where the output layer consists of a final activation funciton
+
+hidden layers can have same activation funcitons but not nesscarily 
+
+
+optimizing a NN is trying to optimize the weight matrices, where each layer has its own set of weights. Our loss is a function of the network weights! 
+
+the weights are optimized via backpropagation, which is:
+1. intialize the weights randomly (multiple ways to do it but we will focus on a gaussian distribution with \mu=0)
+2. compute the loss in a forward pass
+3. differentiate the loss function with respect to the weights using chain rule (backpropagation)
+4. repeat steps 2-3 till loss converges/minimized for optimal set of weights (gradient decent)
+
+they are different loss functions, we focused on binary cross entropy loss, which uses the sigmoid funtion, which is the negative log-likelihood of a bernoulli distribution. -> in the case of binary classification
+This can be extended to multiple classes where the loss funciton is the softmax function. 
+
+We need to randomly intialize weights because we want to not get stuck in a local minima. Getting the optimal weights, we need to find the global minima
+Randomization and stepsize help with this. but we need to pick an appropriate step size
+
+Using gradient decent on the entire dataset, espically if large amounts of data, is slow. we use a different optimization method to speed the process:
+1. mini-batch gradient decent
+2. stochastic gradient decent
+
+
+===============
+
+Artificial Neural Networks (ANNs) are computational models inspired by the biological brain. The fundamental building block of Deep Learning (DL) is the Perceptron. The Perceptron does the follwing: Makes in a linear combination of inputs and weights, which is then input of a non-linear activation function. 
+
+Depending on the task, the output can be a probability for classification or a continuous number for regression.
+
+Since our main focus is approximate complex functions (descsion boundries) we focus on non-linear Activation functions. 
+
+Common functions include Sigmoid, which squashes output between 0 and 1 and is used for probabilities; Tanh, which Squashes the neuron’s output between -1 and 1 and is strictly increasing; and ReLU (Rectified Linear Unit), which acts as a linear function for non-negative inputs and turns negative values to zero.
+
+These perceptrons are stacked to form deep networks, consisting of an input layer, hidden layers where feature extraction occurs, and an output layer. A tecnical note: we include the output layer when discussing the layer dept of a model, for example a 2 layer NN consists of 1 hidden layer and the final output layer.
+
+To train these networks, we use a loss function depending on the type of task we wish to solve. Binary classification typically uses Binary Cross Entropy, which is the negative log-likelihood of a bernoulli distribution which penalizes confident wrong predictions, while multi-class tasks use Cross Entropy with Softmax to ensure probabilities sum to one. Regression tasks generally rely on Mean Squared Error.
+
+Optimization involves minimizing the loss function by adjusting the weight matrices via a  process is called gradient decent. Note: each layer has its own set of weights. Our loss is a function of the network weights. 
+
+# Add Gradient decent algo here in latex 
+in addition we answers some of the following questions
+# Add the questions here. Questions should be numbered in the correct way to the answers in the bottom
+
+1. Weights are initialized randomly to break symmetry and to ensure we do not get stuck in a local minima. They are many differnt ways to randomly initialize weights but the most common one is using a Gaussian distribution, with mean zero.
+
+2. In order to get the optimal weights we need to calculate the gradient. The process involves a forward pass to compute loss, followed by backpropagation to calculate gradients via the chain rule. Repeat this for every weight in the network using gradients from later layers.
+
+3. Weights are then updated in the opposite direction of the gradient with a step size. The appropriate step size helps us to avoid getting stuck in a local minia (Our loss function is non-convex and has multiple minimums). 
+
+Since calculating gradients over an entire dataset is slow, we often use Stochastic Gradient Descent (SGD) or Mini-Batch Gradient Descent to speed up this proccess. 
+
+Beyond standard gradient descent, we use adaptive learning rates to manage learning rates effectively, with some popular algorithms being: Adagrad / RMSprop / Adam
+
+4. We stop our algorithm till we converge. However sometimes we can over-optimize causing our model to overfit. Therefore we add different reularization techniques such as Norm-Regularization, Dropout and Early Stopping to  discourage complex models and Improve generalization of our model on unseen data

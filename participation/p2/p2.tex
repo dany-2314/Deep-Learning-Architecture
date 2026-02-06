@@ -1,0 +1,72 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{parskip}
+\setlength{\parskip}{1em}
+\geometry{a4paper, margin=0.8in}
+
+\title{Week 2 Reflection}
+\author{Daniyal Shahid Iqbal}
+
+\begin{document}
+
+\maketitle
+
+
+Artificial Neural Networks (ANNs) are computational models inspired by the biological brain. The fundamental building block of Deep Learning (DL) is the \textbf{Perceptron}. The perceptron computes a linear combination of inputs and weights, which is then passed through a non-linear activation function.
+
+Depending on the task, the output can be a probability (for classification) or a continuous number (for regression).
+
+Since our main focus is approximating complex functions (decision boundaries), we utilize non-linear activation functions. Common functions include:
+\begin{itemize}
+    \item \textbf{Sigmoid:} Squashes output between 0 and 1; used for probabilities.
+    \item \textbf{Tanh:} Squashes the neuron’s output between -1 and 1; strictly increasing.
+    \item \textbf{ReLU (Rectified Linear Unit):} Acts as a linear function for non-negative inputs and outputs zero for negative values.
+\end{itemize}
+
+
+These perceptrons are stacked to form deep networks consisting of an input layer, hidden layers (where feature extraction occurs), and an output layer.
+
+\textbf{Technical Note:} When discussing the depth of a model, we include the output layer. For example, a ``2-layer NN'' consists of one hidden layer and the final output layer.
+
+
+To train these networks, we use a loss function specific to the task:
+\begin{itemize}
+    \item \textbf{Binary Classification:} Typically uses \textbf{Binary Cross Entropy} (the negative log-likelihood of a Bernoulli distribution), which penalizes wrong predictions.
+    \item \textbf{Multinomial Classification:} Use \textbf{Cross Entropy with Softmax} to ensure probabilities sum to one.
+    \item \textbf{Regression:} Generally relies on \textbf{Mean Squared Error (MSE)}.
+\end{itemize}
+
+The loss function optimization involves minimizing the loss function by adjusting the weight matrices via a process called \textbf{Gradient Descent}. Note that each layer has its own set of weights, and the loss is a function of the entire network's weights.
+
+\textbf{Gradient Descent Algorithm}
+\begin{enumerate}
+    \item Initialize weights
+    \item Loop until convergence:
+    \item Compute gradient, $\frac{\partial J(W)}{\partial W}$
+    \item Update weights, $W^{t+1} \leftarrow W^{t} - \eta \frac{\partial J(W)}{\partial W^\top}$
+    \item Return weights
+\end{enumerate}
+
+We also looked at the following questions and there answers:
+\begin{enumerate}
+    \item \textbf{How to set initial weights?} \\
+    Weights are initialized randomly to break symmetry and ensure the network does not get stuck in a local minimum. There are many different ways to randomly initialize weights, but the most common method uses a Gaussian distribution with a mean of zero.
+
+    \item \textbf{How to compute gradient?} \\
+    To determine the optimal weights, we must calculate the gradient. This process involves a \textbf{forward pass} to compute the loss, followed by \textbf{backpropagation} to calculate gradients via the chain rule. This is repeated for every weight in the network using gradients derived from later layers.
+
+    \item \textbf{How to choose the stepsize?} \\
+    Weights are updated in the opposite direction of the gradient by a specific step size (learning rate). An appropriate step size helps avoid getting stuck in a local minimum (since the loss function is non-convex and has multiple minima).
+    
+    \textit{Note on Optimization Speed:} Calculating gradients over an entire dataset is computationally expensive. To speed this up, we often use \textbf{Stochastic Gradient Descent (SGD)} or \textbf{Mini-Batch Gradient Descent}. Additionally, we use adaptive learning rate algorithms such as \textbf{Adagrad}, \textbf{RMSprop}, or \textbf{Adam} to manage learning rates effectively.
+
+    \item \textbf{When to stop?} \\
+    We typically run the algorithm until convergence. However, over-optimization can cause the model to overfit the training data. To prevent this, we employ regularization techniques such as \textbf{Norm-Regularization}, \textbf{Dropout}, and \textbf{Early Stopping} to discourage overly complex models and improve generalization on unseen data.
+\end{enumerate}
+
+\subsection*{Honor Code}
+I pledge my honor that this lecture summary is my own work and adheres to the guidelines in the instructions.
+- Daniyal Shahid Iqbal
+
+\end{document}

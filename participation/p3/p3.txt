@@ -1,0 +1,144 @@
+Week 2 continuation
+We continued our discussion regarding optimization and answering our final question: "When to stop training?". Our objective is find the "best model" which is obtained by finding the perferct balance between underfitting and overfitting.
+
+During training, we can easily overfit. To prevent this, we try to use regularization techniques such as norm-regularization, drop out and early stopping. 
+
+The general purpose--of any of these techniques--is to discourge model complexity and thereby imporoving generalization.
+
+Norm-regularization(also known as weight decay), tries to penalize large weights using a penality function (l1 or l2 norm). This penalization is added to loss function. So essentially, if you have large weights, your cost function gets bigger. (Note: here large is a more general term. It means the weights can be many or simply just big values). 
+
+# Dropout
+- During training, _randomly_ set some activations to 0
+
+- those nerons are not being used, bilogiocally: non fireing nerons 
+
+- they are different types of randomization techniques that can be used for drop out: bootstrap -> same tech as stats/classical ml (aka bagging)
+However in practice, it does not work well
+
+- typically just use any randomization tech (maybe std. gaussian)
+
+Why dropout works:
+- note: each layer learns a feature of the dataset, digging deeper, each neron also learns another subset of of features. 
+- Highlevel idea: if the features are important, it will be learnt during the leanring 
+
+Data augemtation (DG) helps to increaze the dataset size for "free"
+DG helps with learning the proper features. for example learning to classifying a dog from different noisy backgrounds. We want the model to learn the features that reperent a dog. Another example is to add different noise ( like done in the slides ), different light conditions, etc. DG helps prevent overfitting.
+
+The above is kind of the same rational as drop out.
+
+
+__Early Stopping revisited__.
+- During model training, we can over-parameterize our weights. To prevent this from happening, we employ early stoppeding.
+- Should stop before the validation loss starts to diverege 
+
+
+
+# CNN
+- Milestone architecute. 
+- Performs better than transformers for smaller dataaset
+
+Assume our task is classifyication using a model of 3 *hidden* layers
+
+- A 28 x 28 pictures produces a 784 input vector, which is fed to the model. With a fully connected NN, need to train ~2 million weights. 
+
+- When doing image classifyication, we want to learn the features. For example classifying an 7, we are intereted in learning the features that make up 7, which is a bend between two lines. We are not interested in useless features like the backgrounds.
+
+- Its quite easy for the model to learn trival features (for example the background), if they take majority of the input space. 
+
+- CNN tries to learn the spatial structure of the features.
+
+- local features are invariant between different examples 
+
+- standarize pixels to unit scale for numerical stability
+
+- How can we use spatial structure in the input to inform the architecture
+of the network? -> idea: connect patches of input to neurons in hidden layer. Neuron connected to region of input. Only “sees”these values 
+__Convolution__ comes here. It is a filter (kernal) applied to the image to find possible features. For example, consider a noise signal (time series data with monthly data, iamge), applying a filter helps suppress the noise to find "hidden" features. For example in time series with monthly data, we would apply a fitler to find trends and seasonality.
+
+
+   Image     kernal     patches    
+- (R x R) * (h x h) = (R-h+1) x (R-h+1)  [Applying a filter reduces dimentionality]
+
+different filters produce different feature maps
+- down sampling 
+- shifting to left/right
+- blurring 
+- sharpen an image
+- edge detection
+
+## CNN Architecture
+- Convolution layers + Pooling layers + MLP and then output
+
+convolution layers
+can be thought of as doing feature detection by applying multiple features maps to the input. They are kind of like fully connected feed forward layer with two differences:
+    - Sparse connectivity: not every input unit is connected to every   output unit.
+    - Weight sharing: the network’s weights are each shared between multiple connections.
+
+
+
+Pooling Layers
+it takes small regions (like 2×2) of each feature map.
+	- Applies a function like max or average over the region.
+	- Max pooling: keeps the highest value in that region.
+	- Average pooling: takes the average value.  ￼
+
+What it does:
+	- Reduces spatial dimensions (width and height) of feature maps.
+    - it essentially compress the feature maps of of the previous layer via the functions mentioned above (max or average)
+
+We reduce the representaion using a stride, $S$,  along each dimension which results in the representation being shrunk by a factor of approximately $S$ along each dimension.
+
+
+- For a convolution for color images we use a tensor. We need to represent the RGB values and the size of the image. i.e $(R, G, B ), WHERE R,G,B \in \math{R}^d where is the input size (the flattened image representaion)$
+
+Becuse a filter (kernal) reduce the output dimension, applying multiple coolution will reduce the dimentionality, to prevent this we use zero padding, this helps keep the output space the same dimension as the input space
+
+
+Paddings and Strides
+
+- **Input size**: \( R \times R \), **filter (kernel) size**: \( h \times h \), **zero padding**: \( p \), **stride**: \( s \)
+
+- **Output (of the convolution) size**:  
+  \[
+  \left(\left\lfloor \frac{R - h + 2p}{s} \right\rfloor + 1\right)
+  \times
+  \left(\left\lfloor \frac{R - h + 2p}{s} \right\rfloor + 1\right)
+  \]
+
+- **Paddings** increase the output size
+
+- **Strides** decrease the output size
+
+- Use them according to your tasks
+
+
+Cannot increase kernal/fitler size (specified to extract local features)
+
+
+
+
+
+----
+
+Optimization aims to identify the ``best model'' by striking a perfect balance between underfitting and overfitting. Since models can easily overfit during training, we employ regularization techniques such as norm-regularization, dropout, and early stopping. The primary goal of these methods is to discourage model complexity and improve generalization.
+
+Norm-regularization, also known as weight decay, attempts to penalize large weights using a penalty function (such as the L1 or L2 norm). This penalization is added to the loss function, effectively increasing the cost if the model relies on large or numerous weights.
+
+Dropout is another key technique used to prevent overfitting. During training, it randomly sets some activations to zero, effectively ignoring them. This mimics biologically non-firing neurons and forces the model to learn robust features rather than relying on specific pathways. This concept shares a rationale with Data Augmentation, which increases the dataset size for ``free'' by introducing noise or variations (like changing backgrounds). This helps the model learn to classify based on invariant features rather than trivial static. Finally, we employ early stopping to prevent over-parameterization, halting the training process before the validation loss begins to diverge.
+
+Moving to model architecture, Convolutional Neural Networks (CNNs) represent a significant milestone, often outperforming transformers on smaller datasets. In a traditional fully connected network, a $28 \times 28$ image produces a 784-dimensional input vector, requiring the training of approximately 2 million weights. This is inefficient and prone to learning trivial features like background noise.
+
+CNNs, conversely, attempt to learn the spatial structure of the features. We are interested in learning invariant local features—such as the curve of a number ``7''—rather than the specific location of pixels. This is achieved via convolution, where a filter (kernel) is applied to patches of the image to find hidden features. For example, applying a filter can help suppress noise to reveal trends or seasonality.
+
+A typical CNN architecture consists of convolution layers, pooling layers, and a Multi-Layer Perceptron (MLP) for the output. Convolution layers act as feature detectors. They resemble fully connected feed-forward layers but differ in two key ways: sparse connectivity (not every input unit connects to every output unit) and weight sharing (weights are shared across multiple connections).
+
+Pooling layers follow convolution to compress the representation. By taking small regions (e.g., $2 \times 2$) of each feature map and applying a function like max or average pooling, we reduce the spatial dimensions (width and height). We reduce the representation using a stride, $S$, along each dimension, which results in the representation being shrunk by a factor of approximately $S$.
+
+For color images, we use a tensor to represent the RGB values and the image size, denoted as $(R, G, B)$ in $\mathbb{R}^{d}$. Because a filter reduces the output dimension, applying multiple convolutions will significantly reduce dimensionality. To prevent this, we use zero padding to maintain the output space at the same dimension as the input space.
+
+The relationship between input size ($R \times R$), filter size ($h \times h$), padding ($p$), and stride ($s$) determines the output size:
+\[
+\left(\left\lfloor \frac{R - h + 2p}{s} \right\rfloor + 1\right) \times \left(\left\lfloor \frac{R - h + 2p}{s} \right\rfloor + 1\right)
+\]
+
+In summary, paddings increase the output size, while strides decrease the output size. These parameters should be adjusted according to the specific requirements of the task.

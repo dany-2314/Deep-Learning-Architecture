@@ -1,0 +1,21 @@
+Topic: OCR
+
+Paper: LightOnOCR: A 1B End-to-End Multilingual Vision-Language Model for State-of-the-Art OCR
+
+Some Potential Goals:
+
+(1) Evaluate its effectiveness as a pre-processing step for efficient RAG-based question answering.
+    Most language models struggle to parse documents in natural reading order. As a result, they often fail to answer questions accurately based on document content.
+
+(2) Assess its potential as an accessibility tool for visually impaired users.
+    Many documents and web pages lack proper accessibility considerations. This system could help improve access by converting visual content into speech or structured text.
+
+(3) The paper mentions limitation on other documents, I am curious to see its performance on websites and if it can be finetuned to parse it. 
+
+Goal should be finalized before project proposal. 
+
+Feasibility:
+
+The model and dataset are available on Hugging Face. Since the model contains only 1B parameters, loading it into Google Colab is feasible. Inference on the free version of Google Colab using a T4 GPU is relatively fast.
+
+If training or inference tasks exceed the limits of the free tier, Google Colab Pro is available for approximately $15 CAD per month and provides improved GPUs and increased VRAM. Alternatively, cloud-based GPU services can be used if additional computational resources are required.
